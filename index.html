@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O'zbekiston — Shaffoflik Xaritasi</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Unbounded:wght@400;700;900&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1a;
+    --surface: #111827;
+    --surface2: #1a2332;
+    --border: #1e3a5f;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #22c55e;
+    --danger: #ef4444;
+    --warn: #f59e0b;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --glow: 0 0 20px rgba(0,212,255,0.3);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* === HEADER === */
+  header {
+    background: rgba(10,15,26,0.95);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), #0066cc);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo-sub { font-size: 10px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; font-weight:400; display:block; }
+  .header-nav { display:flex; gap:8px; }
+  .nav-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Noto Sans', sans-serif;
+  }
+  .nav-btn:hover { background: var(--surface2); color: var(--text); border-color: var(--accent); }
+  .nav-btn.primary {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .nav-btn.primary:hover { background: #00b8d9; }
+
+  /* === MAIN LAYOUT === */
+  .main {
+    display: grid;
+    grid-template-columns: 340px 1fr 320px;
+    height: calc(100vh - 64px);
+  }
+
+  /* === LEFT PANEL === */
+  .left-panel {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .panel-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--accent3);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+
+  /* Search */
+  .search-box {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .search-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px 10px 38px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'Noto Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text3); }
+
+  /* Filters */
+  .filter-row {
+    padding: 10px 16px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-chip {
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text3);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .filter-chip.active { background: var(--accent); color: #000; border-color: var(--accent); }
+  .filter-chip:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  /* Org list */
+  .org-list { flex:1; overflow-y:auto; }
+  .org-item {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(30,58,95,0.5);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .org-item:hover { background: var(--surface2); }
+  .org-item.active { background: rgba(0,212,255,0.08); border-left: 3px solid var(--accent); }
+  .org-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .org-meta { font-size: 11px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
+  .org-badge {
+    position: absolute;
+    top: 14px; right: 16px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+  }
+  .badge-red { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+  .badge-yellow { background: rgba(245,158,11,0.15); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
+  .badge-green { background: rgba(34,197,94,0.15); color: var(--accent3); border: 1px solid rgba(34,197,94,0.3); }
+
+  /* === MAP CENTER === */
+  .map-center {
+    position: relative;
+    overflow: hidden;
+    background: #070d1a;
+  }
+  .map-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 60% 40%, rgba(0,100,180,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 70%, rgba(0,212,255,0.05) 0%, transparent 50%);
+  }
+  .map-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(30,58,95,0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30,58,95,0.3) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .map-svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+  }
+  .region {
+    fill: rgba(17,24,39,0.8);
+    stroke: var(--border);
+    stroke-width: 1.5;
+    cursor: pointer;
+    transition: fill 0.2s;
+  }
+  .region:hover { fill: rgba(0,212,255,0.15); stroke: var(--accent); }
+  .region.selected { fill: rgba(0,212,255,0.2); stroke: var(--accent); stroke-width: 2; }
+  .region.hot { fill: rgba(239,68,68,0.15); stroke: rgba(239,68,68,0.5); }
+  .region.warm { fill: rgba(245,158,11,0.1); stroke: rgba(245,158,11,0.4); }
+
+  .map-toolbar {
+    position: absolute;
+    top: 16px; left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .map-btn {
+    width: 36px; height: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--text2);
+    font-size: 16px;
+    transition: all 0.15s;
+  }
+  .map-btn:hover { background: var(--surface2); color: var(--accent); border-color: var(--accent); }
+
+  .map-legend {
+    position: absolute;
+    bottom: 16px; left: 16px;
+    background: rgba(17,24,39,0.9);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    backdrop-filter: blur(8px);
+  }
+  .legend-title { color: var(--text3); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .legend-item { display:flex; align-items:center; gap:8px; color:var(--text2); margin-bottom:6px; }
+  .legend-dot { width:10px; height:10px; border-radius:50%; }
+
+  .map-stats {
+    position: absolute;
+    top: 16px; right: 16px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .stat-card {
+    background: rgba(17,24,39,0.9);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    min-width: 140px;
+    backdrop-filter: blur(8px);
+  }
+  .stat-val {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .stat-val.red { color: var(--danger); }
+  .stat-val.cyan { color: var(--accent); }
+  .stat-val.green { color: var(--accent3); }
+  .stat-label { font-size: 10px; color: var(--text3); margin-top: 4px; font-family:'IBM Plex Mono',monospace; text-transform:uppercase; letter-spacing:0.5px; }
+
+  /* Tooltip */
+  .map-tooltip {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 100;
+    min-width: 180px;
+    box-shadow: var(--glow);
+    display: none;
+  }
+  .tooltip-title { font-weight:700; color:var(--accent); margin-bottom:6px; }
+  .tooltip-row { display:flex; justify-content:space-between; gap:16px; color:var(--text2); margin-bottom:3px; }
+  .tooltip-row span:last-child { color:var(--text); font-family:'IBM Plex Mono',monospace; }
+
+  /* === RIGHT PANEL === */
+  .right-panel {
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .panel-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 14px 8px;
+    background: transparent;
+    border: none;
+    color: var(--text3);
+    font-size: 11px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-content { display:none; flex:1; flex-direction:column; }
+  .tab-content.active { display:flex; }
+
+  /* Detail panel */
+  .detail-section {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-title {
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .detail-org-name {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .detail-org-type {
+    font-size: 12px;
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    margin-bottom: 12px;
+  }
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(30,58,95,0.3);
+    font-size: 12px;
+  }
+  .info-key { color: var(--text3); }
+  .info-val { color: var(--text); font-family:'IBM Plex Mono',monospace; text-align:right; }
+
+  /* Staff cards */
+  .staff-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: var(--surface2);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .staff-card:hover { border-color: var(--accent); }
+  .staff-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1e3a5f, #0066cc);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+  }
+  .staff-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .staff-role { font-size: 11px; color: var(--text3); font-family:'IBM Plex Mono',monospace; margin-top:2px; }
+  .staff-flag {
+    margin-left: auto;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Budget */
+  .budget-item {
+    padding: 12px;
+    background: var(--surface2);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+  }
+  .budget-name { font-size: 13px; color: var(--text); margin-bottom: 6px; }
+  .budget-bar-bg {
+    height: 4px;
+    background: rgba(30,58,95,0.5);
+    border-radius: 2px;
+    margin-bottom: 6px;
+    overflow: hidden;
+  }
+  .budget-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.8s ease;
+  }
+  .budget-meta { display:flex; justify-content:space-between; font-size:11px; font-family:'IBM Plex Mono',monospace; }
+  .budget-amount { color: var(--accent); }
+  .budget-deadline { color: var(--text3); }
+  .budget-status-ok { color: var(--accent3); }
+  .budget-status-late { color: var(--danger); }
+
+  /* Complaints */
+  .complaint-item {
+    padding: 12px;
+    background: var(--surface2);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+  }
+  .complaint-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; }
+  .complaint-id { font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text3); }
+  .complaint-status {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .status-new { background:rgba(0,212,255,0.15); color:var(--accent); border:1px solid rgba(0,212,255,0.3); }
+  .status-process { background:rgba(245,158,11,0.15); color:var(--warn); border:1px solid rgba(245,158,11,0.3); }
+  .status-closed { background:rgba(34,197,94,0.15); color:var(--accent3); border:1px solid rgba(34,197,94,0.3); }
+  .status-rejected { background:rgba(100,116,139,0.15); color:var(--text3); border:1px solid rgba(100,116,139,0.3); }
+  .complaint-text { font-size:12px; color:var(--text2); margin-bottom:6px; line-height:1.5; }
+  .complaint-meta { font-size:11px; color:var(--text3); font-family:'IBM Plex Mono',monospace; }
+
+  /* Stats chart */
+  .chart-wrap {
+    padding: 16px;
+  }
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 120px;
+    margin-bottom: 8px;
+  }
+  .chart-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .chart-bar {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    transition: height 0.8s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  .chart-bar:hover::after {
+    content: attr(data-val);
+    position: absolute;
+    top: -20px; left:50%; transform:translateX(-50%);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    white-space: nowrap;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text);
+  }
+  .chart-label { font-size:9px; color:var(--text3); font-family:'IBM Plex Mono',monospace; text-align:center; }
+
+  /* Complaint form */
+  .complaint-form { padding: 16px; flex:1; overflow-y:auto; }
+  .form-group { margin-bottom: 14px; }
+  .form-label {
+    display: block;
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'Noto Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+  .form-select { appearance: none; }
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .form-submit {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: 13px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Unbounded', sans-serif;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .form-submit:hover { background: #00b8d9; transform: translateY(-1px); box-shadow: var(--glow); }
+  .form-note {
+    font-size: 11px;
+    color: var(--text3);
+    text-align: center;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* Notification */
+  .notification {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--accent3);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13px;
+    max-width: 300px;
+    box-shadow: 0 0 24px rgba(34,197,94,0.2);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 9999;
+  }
+  .notification.show { transform: translateY(0); opacity: 1; }
+  .notification-title { font-weight:700; color:var(--accent3); margin-bottom:4px; }
+  .notification-body { color:var(--text2); }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 0 40px rgba(0,212,255,0.1);
+  }
+  .modal-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .modal-sub { font-size: 12px; color: var(--text3); margin-bottom: 20px; font-family:'IBM Plex Mono',monospace; }
+  .modal-close {
+    float: right;
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--danger); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+  /* Animated entry */
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .animate-in { animation: fadeIn 0.3s ease forwards; }
+
+  /* Uzbekistan SVG simplified regions */
+  .map-label { fill:var(--text3); font-size:9px; font-family:'IBM Plex Mono',monospace; pointer-events:none; text-anchor:middle; }
+
+  .region-name-overlay {
+    position: absolute;
+    background: rgba(17,24,39,0.95);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    pointer-events: none;
+    display: none;
+    font-family: 'Unbounded', sans-serif;
+  }
+
+  .section-empty {
+    padding: 24px 16px;
+    text-align: center;
+    color: var(--text3);
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .progress-ring {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .ring-wrap { position:relative; width:48px; height:48px; flex-shrink:0; }
+  .ring-svg { transform:rotate(-90deg); }
+  .ring-bg { fill:none; stroke:var(--surface2); stroke-width:4; }
+  .ring-fill { fill:none; stroke-width:4; stroke-linecap:round; transition: stroke-dashoffset 1s ease; }
+  .ring-text { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; font-family:'IBM Plex Mono',monospace; color:var(--text); font-weight:600; }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">🗺️</div>
+    <div>
+      SHAFFOFLIK XARITASI
+      <span class="logo-sub">O'ZBEKISTON KORRUPSIYAGA QARSHI TIZIM</span>
+    </div>
+  </div>
+  <div class="header-nav">
+    <button class="nav-btn" onclick="openModal('stats-modal')">📊 Statistika</button>
+    <button class="nav-btn" onclick="showTab('right','shikoyat')">⚠️ Shikoyat</button>
+    <button class="nav-btn primary" onclick="openModal('login-modal')">🔐 Kirish</button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- LEFT: Tashkilotlar ro'yxati -->
+  <div class="left-panel">
+    <div class="panel-header">
+      <span>TASHKILOTLAR</span>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div class="live-dot"></div>
+        <span style="color:var(--accent3)">JONLI</span>
+      </div>
+    </div>
+    <div class="search-box">
+      <input class="search-input" type="text" placeholder="Tashkilot, manzil, xodim..." oninput="filterOrgs(this.value)">
+    </div>
+    <div class="filter-row">
+      <button class="filter-chip active" onclick="filterCat(this,'barchasi')">Barchasi</button>
+      <button class="filter-chip" onclick="filterCat(this,'talim')">Ta'lim</button>
+      <button class="filter-chip" onclick="filterCat(this,'sog')">Sog'liq</button>
+      <button class="filter-chip" onclick="filterCat(this,'mahkama')">Mahkama</button>
+      <button class="filter-chip" onclick="filterCat(this,'kommunal')">Kommunal</button>
+    </div>
+    <div class="org-list" id="orgList"></div>
+  </div>
+
+  <!-- CENTER: Xarita -->
+  <div class="map-center" id="mapCenter">
+    <div class="map-bg"></div>
+    <div class="map-grid"></div>
+
+    <svg class="map-svg" viewBox="0 0 700 500" id="mapSvg">
+      <!-- Simplified Uzbekistan regions -->
+      <!-- Toshkent -->
+      <polygon class="region" id="reg-toshkent" data-name="Toshkent shahri" data-cases="47" data-orgs="312"
+        points="370,170 400,155 420,165 415,195 390,205 365,195"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="392" y="183">TOS</text>
+
+      <!-- Toshkent viloyat -->
+      <polygon class="region warm" id="reg-toshviloyat" data-name="Toshkent viloyati" data-cases="28" data-orgs="187"
+        points="330,130 400,110 440,125 440,165 420,165 400,155 370,170 365,195 340,190 320,175 315,150"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="378" y="145">TOS-V</text>
+
+      <!-- Samarqand -->
+      <polygon class="region" id="reg-samarqand" data-name="Samarqand viloyati" data-cases="19" data-orgs="143"
+        points="240,230 300,210 340,220 345,260 310,285 260,275 230,260"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="288" y="252">SAM</text>
+
+      <!-- Buxoro -->
+      <polygon class="region hot" id="reg-buxoro" data-name="Buxoro viloyati" data-cases="34" data-orgs="156"
+        points="160,270 240,250 260,275 255,330 210,360 150,340 130,305 140,280"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="197" y="308">BUX</text>
+
+      <!-- Navoiy -->
+      <polygon class="region" id="reg-navoiy" data-name="Navoiy viloyati" data-cases="12" data-orgs="89"
+        points="200,190 260,175 300,210 260,275 210,260 185,240 195,215"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="240" y="228">NAV</text>
+
+      <!-- Qashqadaryo -->
+      <polygon class="region warm" id="reg-qashqa" data-name="Qashqadaryo viloyati" data-cases="22" data-orgs="121"
+        points="270,290 310,285 345,300 340,350 305,370 265,355 250,320"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="298" y="330">QAS</text>
+
+      <!-- Surxondaryo -->
+      <polygon class="region" id="reg-surxon" data-name="Surxondaryo viloyati" data-cases="16" data-orgs="98"
+        points="310,355 345,345 380,360 375,410 340,425 305,410 295,385"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="337" y="390">SUR</text>
+
+      <!-- Farg'ona -->
+      <polygon class="region hot" id="reg-fargona" data-name="Farg'ona viloyati" data-cases="38" data-orgs="201"
+        points="480,170 530,155 565,180 560,220 525,235 480,225 460,205"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="513" y="196">FAR</text>
+
+      <!-- Andijon -->
+      <polygon class="region warm" id="reg-andijon" data-name="Andijon viloyati" data-cases="29" data-orgs="167"
+        points="530,200 565,190 590,210 580,240 550,248 525,240"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="557" y="224">AND</text>
+
+      <!-- Namangan -->
+      <polygon class="region" id="reg-namangan" data-name="Namangan viloyati" data-cases="18" data-orgs="134"
+        points="450,145 490,130 530,140 530,165 500,175 460,170"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="491" y="157">NAM</text>
+
+      <!-- Jizzax -->
+      <polygon class="region" id="reg-jizzax" data-name="Jizzax viloyati" data-cases="11" data-orgs="76"
+        points="340,200 380,190 415,205 410,240 370,255 340,245 330,225"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="372" y="223">JIZ</text>
+
+      <!-- Sirdaryo -->
+      <polygon class="region" id="reg-sirdaryo" data-name="Sirdaryo viloyati" data-cases="9" data-orgs="62"
+        points="400,155 440,145 470,165 465,195 430,205 415,195 420,165"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="438" y="178">SIR</text>
+
+      <!-- Xorazm -->
+      <polygon class="region warm" id="reg-xorazm" data-name="Xorazm viloyati" data-cases="21" data-orgs="95"
+        points="95,180 155,165 175,185 165,215 120,225 90,210"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="130" y="197">XOR</text>
+
+      <!-- Qoraqalpog'iston -->
+      <polygon class="region" id="reg-qoraqalp" data-name="Qoraqalpog'iston" data-cases="14" data-orgs="83"
+        points="50,80 160,60 190,110 175,155 155,165 100,155 55,130"
+        onclick="selectRegion(this)"/>
+      <text class="map-label" x="118" y="115">QQR</text>
+
+      <!-- Incident markers -->
+      <circle cx="390" cy="183" r="5" fill="var(--danger)" opacity="0.9" style="cursor:pointer" onclick="showIncident('Toshkent shahar hokimiyati — pora hodisasi')"/>
+      <circle cx="197" cy="308" r="6" fill="var(--danger)" opacity="0.9" style="cursor:pointer" onclick="showIncident('Buxoro 7-maktab direktori — pora bilan ushlandi')"/>
+      <circle cx="513" cy="196" r="5" fill="var(--danger)" opacity="0.9" style="cursor:pointer" onclick="showIncident('Farg\'ona viloyat kasalxonasi — tender firibgarligi')"/>
+      <circle cx="288" cy="252" r="4" fill="var(--warn)" opacity="0.9" style="cursor:pointer" onclick="showIncident('Samarqand shahar suv ta\'minoti — byudjet o\'g\'irligi')"/>
+      <circle cx="298" cy="330" r="4" fill="var(--warn)" opacity="0.9" style="cursor:pointer" onclick="showIncident('Qashqadaryo tumanidagi qurilish loyihasi — shikoyat')"/>
+
+      <!-- Pulse rings for hot incidents -->
+      <circle cx="197" cy="308" r="10" fill="none" stroke="var(--danger)" stroke-width="1" opacity="0.5">
+        <animate attributeName="r" from="6" to="18" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="513" cy="196" r="10" fill="none" stroke="var(--danger)" stroke-width="1" opacity="0.5">
+        <animate attributeName="r" from="5" to="16" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.7" to="0" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+
+    <!-- Toolbar -->
+    <div class="map-toolbar">
+      <div class="map-btn" title="Kattalashtirish">+</div>
+      <div class="map-btn" title="Kichraytirish">−</div>
+      <div class="map-btn" title="Qayta o'rnatish" onclick="resetMap()">⟳</div>
+      <div class="map-btn" title="Ko'rish rejimi" onclick="toggleHeatmap()">🌡</div>
+    </div>
+
+    <!-- Stats top right -->
+    <div class="map-stats">
+      <div class="stat-card">
+        <div class="stat-val red" id="totalCases">318</div>
+        <div class="stat-label">Jami hodisalar</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val cyan" id="totalOrgs">1,924</div>
+        <div class="stat-label">Tashkilotlar</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val green" id="solvedCases">187</div>
+        <div class="stat-label">Hal qilindi</div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="map-legend">
+      <div class="legend-title">Ko'rsatkich</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div> Yuqori xavf (30+)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--warn)"></div> O'rta xavf (15-30)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Faol shikoyat</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent3)"></div> Hal qilindi</div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="map-tooltip" id="mapTooltip">
+      <div class="tooltip-title" id="ttTitle">—</div>
+      <div class="tooltip-row"><span>Hodisalar:</span><span id="ttCases">—</span></div>
+      <div class="tooltip-row"><span>Tashkilotlar:</span><span id="ttOrgs">—</span></div>
+      <div class="tooltip-row"><span>Holat:</span><span id="ttStatus">—</span></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Detail panel -->
+  <div class="right-panel">
+    <div class="panel-tabs">
+      <button class="tab-btn active" onclick="showTab('right','malumot')" id="tab-malumot">MA'LUMOT</button>
+      <button class="tab-btn" onclick="showTab('right','byudjet')" id="tab-byudjet">BYUDJET</button>
+      <button class="tab-btn" onclick="showTab('right','shikoyat')" id="tab-shikoyat">SHIKOYAT</button>
+    </div>
+
+    <!-- Tab: Ma'lumot -->
+    <div class="tab-content active" id="tc-malumot">
+      <div class="detail-section">
+        <div class="detail-title">Tanlangan Ob'ekt</div>
+        <div class="detail-org-name" id="detailOrgName">Toshkent shahar 34-umumta'lim maktabi</div>
+        <div class="detail-org-type" id="detailOrgType">TA'LIM · TOSHKENT SHAHAR</div>
+        <div>
+          <div class="info-row"><span class="info-key">Manzil</span><span class="info-val">Yakkasaroy, 12-ko'cha</span></div>
+          <div class="info-row"><span class="info-key">Telefon</span><span class="info-val">+998 71 234-56-78</span></div>
+          <div class="info-row"><span class="info-key">INN</span><span class="info-val">302345678</span></div>
+          <div class="info-row"><span class="info-key">Xodimlar</span><span class="info-val">84 nafar</span></div>
+          <div class="info-row"><span class="info-key">Shikoyatlar</span><span class="info-val" style="color:var(--warn)">3 ta</span></div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-title">Mansabdor Shaxslar</div>
+        <div id="staffList">
+          <div class="staff-card" onclick="selectStaff('Karimov Sherzod Baxtiyorovich','Direktor')">
+            <div class="staff-avatar">👤</div>
+            <div>
+              <div class="staff-name">Karimov Sherzod B.</div>
+              <div class="staff-role">DIREKTOR</div>
+            </div>
+            <div class="staff-flag" style="background:var(--warn)" title="Shikoyat bor"></div>
+          </div>
+          <div class="staff-card" onclick="selectStaff('Nazarova Malika Yusupovna','O\'quv ishlari bo\'yicha direktor o\'rinbosari')">
+            <div class="staff-avatar">👤</div>
+            <div>
+              <div class="staff-name">Nazarova Malika Y.</div>
+              <div class="staff-role">DIREKTOR O'RINBOSARI</div>
+            </div>
+            <div class="staff-flag" style="background:var(--accent3)"></div>
+          </div>
+          <div class="staff-card" onclick="selectStaff('Toshmatov Jahongir Olimovich','Buxgalter')">
+            <div class="staff-avatar">👤</div>
+            <div>
+              <div class="staff-name">Toshmatov Jahongir O.</div>
+              <div class="staff-role">BOSH BUXGALTER</div>
+            </div>
+            <div class="staff-flag" style="background:var(--accent3)"></div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-title">So'nggi Shikoyatlar</div>
+        <div class="complaint-item">
+          <div class="complaint-header">
+            <span class="complaint-id">#SHK-2024-0047</span>
+            <span class="complaint-status status-process">Tekshirilmoqda</span>
+          </div>
+          <div class="complaint-text">Direktor o'quvchilardan niqob xaridi uchun pul undiryapti</div>
+          <div class="complaint-meta">📅 2024-03-15 · Ta'lim soha</div>
+        </div>
+        <div class="complaint-item">
+          <div class="complaint-header">
+            <span class="complaint-id">#SHK-2024-0031</span>
+            <span class="complaint-status status-closed">Hal qilindi</span>
+          </div>
+          <div class="complaint-text">Maktab ta'mirlash ishlarida sifatsiz material ishlatilgan</div>
+          <div class="complaint-meta">📅 2024-02-20 · Qurilish soha</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Byudjet -->
+    <div class="tab-content" id="tc-byudjet">
+      <div class="detail-section">
+        <div class="detail-title">Byudjet Ajratmalari · 2024</div>
+        <div id="budgetList">
+          <div class="budget-item">
+            <div class="budget-name">🏫 Maktab ta'miri (3-qavatlar)</div>
+            <div class="budget-bar-bg">
+              <div class="budget-bar-fill" style="width:65%;background:linear-gradient(90deg,var(--accent),#0066cc)"></div>
+            </div>
+            <div class="budget-meta">
+              <span class="budget-amount">₴ 450,000,000</span>
+              <span class="budget-deadline">Muddat: 01.09.2024</span>
+            </div>
+            <div style="margin-top:6px;font-size:11px;">
+              <span class="budget-status-ok">✅ Bajarilmoqda (65%)</span>
+              <span style="color:var(--text3); margin-left:8px;">Mas'ul: Qurilish boshqarmasi</span>
+            </div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-name">💻 Kompyuter sinflari jihozlash</div>
+            <div class="budget-bar-bg">
+              <div class="budget-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--accent3),#16a34a)"></div>
+            </div>
+            <div class="budget-meta">
+              <span class="budget-amount">₴ 120,000,000</span>
+              <span class="budget-deadline">Muddat: 01.03.2024</span>
+            </div>
+            <div style="margin-top:6px;font-size:11px;">
+              <span class="budget-status-ok">✅ Bajarildi (100%)</span>
+              <span style="color:var(--text3); margin-left:8px;">Mas'ul: Ta'lim vazirligi</span>
+            </div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-name">🚻 Sanitariya inshootlari</div>
+            <div class="budget-bar-bg">
+              <div class="budget-bar-fill" style="width:0%;background:var(--danger)"></div>
+            </div>
+            <div class="budget-meta">
+              <span class="budget-amount">₴ 85,000,000</span>
+              <span class="budget-deadline">Muddat: 01.04.2024</span>
+            </div>
+            <div style="margin-top:6px;font-size:11px;">
+              <span class="budget-status-late">⚠️ Kechikmoqda (0%) — Muddati o'tdi!</span>
+              <span style="color:var(--text3); margin-left:8px;">Mas'ul: Yakkasaroy tuman hokimi</span>
+            </div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-name">📚 Darsliklar va o'quv qo'llanmalari</div>
+            <div class="budget-bar-bg">
+              <div class="budget-bar-fill" style="width:90%;background:linear-gradient(90deg,var(--accent3),#16a34a)"></div>
+            </div>
+            <div class="budget-meta">
+              <span class="budget-amount">₴ 32,000,000</span>
+              <span class="budget-deadline">Muddat: 01.08.2024</span>
+            </div>
+            <div style="margin-top:6px;font-size:11px;">
+              <span class="budget-status-ok">✅ Deyarli tayyor (90%)</span>
+            </div>
+          </div>
+        </div>
+        <button class="nav-btn" style="width:100%;margin-top:12px;text-align:center;" onclick="showTab('right','shikoyat');document.getElementById('shkSoha').value='byudjet'">
+          ⚠️ Ushbu byudjet bo'yicha shikoyat
+        </button>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-wrap">
+        <div class="detail-title">Viloyatlar Bo'yicha Hodisalar (2024)</div>
+        <div class="chart-bars" id="statsChart"></div>
+      </div>
+    </div>
+
+    <!-- Tab: Shikoyat -->
+    <div class="tab-content" id="tc-shikoyat">
+      <div class="complaint-form">
+        <div style="margin-bottom:16px;">
+          <div style="font-family:'Unbounded',sans-serif;font-size:13px;margin-bottom:4px;">Shikoyat Yuborish</div>
+          <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;">Barcha ma'lumotlar maxfiy saqlanadi va huquqni muhofaza qiluvchi organlar tomonidan ko'rib chiqiladi.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Viloyat / Shahar *</label>
+          <select class="form-select" id="shkViloyat">
+            <option value="">Tanlang...</option>
+            <option>Toshkent shahri</option>
+            <option>Toshkent viloyati</option>
+            <option>Samarqand viloyati</option>
+            <option>Buxoro viloyati</option>
+            <option>Farg'ona viloyati</option>
+            <option>Andijon viloyati</option>
+            <option>Namangan viloyati</option>
+            <option>Qashqadaryo viloyati</option>
+            <option>Surxondaryo viloyati</option>
+            <option>Navoiy viloyati</option>
+            <option>Jizzax viloyati</option>
+            <option>Sirdaryo viloyati</option>
+            <option>Xorazm viloyati</option>
+            <option>Qoraqalpog'iston Resp.</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tashkilot nomi *</label>
+          <input class="form-input" type="text" id="shkOrg" placeholder="Masalan: Buxoro shahar 7-maktabi">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mansabdor shaxs (ixtiyoriy)</label>
+          <input class="form-input" type="text" id="shkPerson" placeholder="Ism, familiyasi va lavozimi">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Soha *</label>
+          <select class="form-select" id="shkSoha">
+            <option value="">Tanlang...</option>
+            <option value="talim">Ta'lim</option>
+            <option value="soglik">Sog'liqni saqlash</option>
+            <option value="byudjet">Byudjet / Moliya</option>
+            <option value="qurilish">Qurilish</option>
+            <option value="kommunal">Kommunal xizmat</option>
+            <option value="yer">Yer-mulk</option>
+            <option value="soliq">Soliq / Bojxona</option>
+            <option value="boshqa">Boshqa</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Shikoyat mazmuni *</label>
+          <textarea class="form-textarea" id="shkMatn" placeholder="Nima bo'lganini batafsil yozing: sana, joy, hodisa tavsifi..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Dalillar (ixtiyoriy)</label>
+          <input class="form-input" type="text" placeholder="Hujjat, rasm, audio fayl nomi...">
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;font-family:'IBM Plex Mono',monospace;">Rasm/hujjat yuklash imkoniyati tez orada</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Aloqa (ixtiyoriy)</label>
+          <input class="form-input" type="text" id="shkAloqa" placeholder="+998 9X XXX-XX-XX yoki email">
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;font-family:'IBM Plex Mono',monospace;">Noma'lum holda ham yuborishingiz mumkin</div>
+        </div>
+
+        <button class="form-submit" onclick="submitComplaint()">🚨 SHIKOYAT YUBORISH</button>
+        <div class="form-note">
+          Shikoyatingiz avtomatik ravishda O'zbekiston Respublikasi<br>
+          Bosh prokuraturasi tizimiga yo'naltiriladi.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Statistics -->
+<div class="modal-overlay" id="stats-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('stats-modal')">✕</button>
+    <div class="modal-title">📊 Milliy Statistika</div>
+    <div class="modal-sub">2024-yil, yanvar — aprel</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;">
+        <div style="font-family:'Unbounded',sans-serif;font-size:28px;color:var(--danger);font-weight:900;">318</div>
+        <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:4px;">JAMI HODISALAR</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;">
+        <div style="font-family:'Unbounded',sans-serif;font-size:28px;color:var(--accent3);font-weight:900;">58.8%</div>
+        <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:4px;">HAL QILINDI</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;">
+        <div style="font-family:'Unbounded',sans-serif;font-size:28px;color:var(--accent);font-weight:900;">1,924</div>
+        <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:4px;">TASHKILOTLAR</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;">
+        <div style="font-family:'Unbounded',sans-serif;font-size:28px;color:var(--warn);font-weight:900;">47</div>
+        <div style="font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:4px;">FAOL TEKSHIRUV</div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;color:var(--text3);margin-bottom:8px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1px;">Soha bo'yicha</div>
+    <div id="sectorStats"></div>
+
+    <button class="nav-btn primary" onclick="closeModal('stats-modal')" style="width:100%;margin-top:16px;">Yopish</button>
+  </div>
+</div>
+
+<!-- MODAL: Login -->
+<div class="modal-overlay" id="login-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login-modal')">✕</button>
+    <div class="modal-title">🔐 Tizimga Kirish</div>
+    <div class="modal-sub">Huquqni muhofaza qiluvchi organ xodimlari uchun</div>
+    <div class="form-group"><label class="form-label">Login</label><input class="form-input" type="text" placeholder="username@prokuratura.uz"></div>
+    <div class="form-group"><label class="form-label">Parol</label><input class="form-input" type="password" placeholder="••••••••"></div>
+    <button class="form-submit" onclick="closeModal('login-modal');showNotif('Kirish muvaffaqiyatli!','Vakolatli foydalanuvchi sifatida kirdingiz.')">KIRISH</button>
+    <div class="form-note" style="margin-top:12px">Faqat vakolatli xodimlar uchun. Ruxsatsiz kirish jinoyat hisoblanadi.</div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notification" id="notification">
+  <div class="notification-title" id="notifTitle">—</div>
+  <div class="notification-body" id="notifBody">—</div>
+</div>
+
+<script>
+// === DATA ===
+const orgs = [
+  {id:1, name:"Toshkent shahar 34-maktabi", type:"talim", region:"Toshkent shahri", cases:3, status:"warn", address:"Yakkasaroy, 12-ko'cha"},
+  {id:2, name:"Buxoro shahar 7-maktabi", type:"talim", region:"Buxoro viloyati", cases:5, status:"red", address:"Buxoro sh., Mustaqillik ko'ch."},
+  {id:3, name:"Farg'ona viloyat kasalxonasi", type:"sog", region:"Farg'ona viloyati", cases:4, status:"red", address:"Farg'ona sh., Tibbiyot ko'ch."},
+  {id:4, name:"Samarqand shahar suv ta'minoti", type:"kommunal", region:"Samarqand viloyati", cases:2, status:"warn", address:"Samarqand sh., Zarafshon 5"},
+  {id:5, name:"Toshkent viloyat hokimligi", type:"mahkama", region:"Toshkent viloyati", cases:6, status:"red", address:"Nurafshon sh., Markaziy ko'ch."},
+  {id:6, name:"Andijon shahar poliklinkasi №3", type:"sog", region:"Andijon viloyati", cases:1, status:"green", address:"Andijon sh., Navoi ko'ch."},
+  {id:7, name:"Namangan viloyat yo'l boshqarmasi", type:"mahkama", region:"Namangan viloyati", cases:3, status:"warn", address:"Namangan sh., Yo'l 18"},
+  {id:8, name:"Navoiy shahar elektr tarmog'i", type:"kommunal", region:"Navoiy viloyati", cases:1, status:"green", address:"Navoiy sh., Energetiklar 3"},
+  {id:9, name:"Qashqadaryo qurilish boshqarmasi", type:"mahkama", region:"Qashqadaryo viloyati", cases:4, status:"red", address:"Qarshi sh., Qurilishchilar 7"},
+  {id:10, name:"Xorazm viloyat maktabgacha ta'lim", type:"talim", region:"Xorazm viloyati", cases:2, status:"warn", address:"Urganch sh., Bog'lar ko'ch."},
+];
+
+const sectors = [
+  {name:"Ta'lim", count:89, color:"#00d4ff"},
+  {name:"Sog'liqni saqlash", count:67, color:"#ef4444"},
+  {name:"Qurilish", count:54, color:"#f59e0b"},
+  {name:"Kommunal", count:43, color:"#8b5cf6"},
+  {name:"Moliya / Byudjet", count:38, color:"#ff6b35"},
+  {name:"Yer-mulk", count:27, color:"#22c55e"},
+];
+
+// === RENDER ===
+function renderOrgs(list) {
+  const container = document.getElementById('orgList');
+  container.innerHTML = list.map(o => `
+    <div class="org-item ${o.id===1?'active':''}" onclick="selectOrg(${o.id})">
+      <div class="org-name">${o.name}</div>
+      <div class="org-meta">${o.region} · ${o.cases} shikoyat</div>
+      <div class="org-badge badge-${o.status}">${o.status==='red'?'XAVFLI':o.status==='warn'?'E\'TIBOR':'YAXSHI'}</div>
+    </div>
+  `).join('');
+}
+renderOrgs(orgs);
+
+function renderSectors() {
+  const container = document.getElementById('sectorStats');
+  container.innerHTML = sectors.map(s => `
+    <div style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+        <span style="color:var(--text)">${s.name}</span>
+        <span style="font-family:'IBM Plex Mono',monospace;color:${s.color}">${s.count}</span>
+      </div>
+      <div style="height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;">
+        <div style="height:100%;width:${(s.count/89*100).toFixed(0)}%;background:${s.color};border-radius:2px;transition:width 0.8s"></div>
+      </div>
+    </div>
+  `).join('');
+}
+renderSectors();
+
+function renderChart() {
+  const data = [
+    {label:"BUX",val:34,color:"#ef4444"},
+    {label:"FAR",val:38,color:"#ef4444"},
+    {label:"TOS",val:47,color:"#f59e0b"},
+    {label:"AND",val:29,color:"#f59e0b"},
+    {label:"SAM",val:19,color:"#00d4ff"},
+    {label:"QAS",val:22,color:"#f59e0b"},
+    {label:"NAM",val:18,color:"#00d4ff"},
+    {label:"XOR",val:21,color:"#f59e0b"},
+  ];
+  const max = Math.max(...data.map(d=>d.val));
+  document.getElementById('statsChart').innerHTML = data.map(d => `
+    <div class="chart-col">
+      <div class="chart-bar" data-val="${d.val}" style="height:${(d.val/max*90).toFixed(0)}px;background:${d.color};"></div>
+      <div class="chart-label">${d.label}</div>
+    </div>
+  `).join('');
+}
+renderChart();
+
+// === INTERACTIONS ===
+function filterOrgs(q) {
+  const filtered = orgs.filter(o =>
+    o.name.toLowerCase().includes(q.toLowerCase()) ||
+    o.region.toLowerCase().includes(q.toLowerCase())
+  );
+  renderOrgs(filtered);
+}
+
+let activeCategory = 'barchasi';
+function filterCat(btn, cat) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  activeCategory = cat;
+  const filtered = cat === 'barchasi' ? orgs : orgs.filter(o => o.type === cat);
+  renderOrgs(filtered);
+}
+
+function selectOrg(id) {
+  document.querySelectorAll('.org-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  const org = orgs.find(o => o.id === id);
+  if (org) {
+    document.getElementById('detailOrgName').textContent = org.name;
+    document.getElementById('detailOrgType').textContent =
+      (org.type==='talim'?"TA'LIM":org.type==='sog'?"SOG'LIQ":org.type==='kommunal'?"KOMMUNAL":"MAHKAMA") +
+      ' · ' + org.region.toUpperCase();
+    showTab('right','malumot');
+  }
+}
+
+function showTab(panel, tab) {
+  ['malumot','byudjet','shikoyat'].forEach(t => {
+    const btn = document.getElementById('tab-'+t);
+    const tc = document.getElementById('tc-'+t);
+    if(btn) btn.classList.toggle('active', t===tab);
+    if(tc) tc.classList.toggle('active', t===tab);
+  });
+}
+
+function selectRegion(el) {
+  document.querySelectorAll('.region').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+  const name = el.getAttribute('data-name');
+  const cases = el.getAttribute('data-cases');
+  const orgsCount = el.getAttribute('data-orgs');
+  showNotif('Viloyat tanlandi', `${name}: ${cases} hodisa, ${orgsCount} tashkilot`);
+}
+
+function showIncident(msg) {
+  showNotif('⚠️ Faol Hodisa', msg);
+}
+
+// Map tooltip
+const mapSvg = document.getElementById('mapSvg');
+const tooltip = document.getElementById('mapTooltip');
+mapSvg.addEventListener('mousemove', e => {
+  const region = e.target.closest('.region');
+  if (region) {
+    tooltip.style.display = 'block';
+    const rect = mapSvg.getBoundingClientRect();
+    tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
+    tooltip.style.top = (e.clientY - rect.top + 12) + 'px';
+    document.getElementById('ttTitle').textContent = region.getAttribute('data-name');
+    document.getElementById('ttCases').textContent = region.getAttribute('data-cases') + ' ta';
+    document.getElementById('ttOrgs').textContent = region.getAttribute('data-orgs') + ' ta';
+    const c = parseInt(region.getAttribute('data-cases'));
+    document.getElementById('ttStatus').textContent = c>30?'🔴 Yuqori xavf':c>15?'🟡 O\'rta xavf':'🟢 Qulay';
+  } else {
+    tooltip.style.display = 'none';
+  }
+});
+
+let heatmapMode = false;
+function toggleHeatmap() {
+  heatmapMode = !heatmapMode;
+  showNotif('Xarita rejimi', heatmapMode ? 'Issiqliq xaritasi yoqildi' : 'Oddiy rejim');
+}
+function resetMap() {
+  document.querySelectorAll('.region').forEach(r => r.classList.remove('selected'));
+  showNotif('Xarita qayta o\'rnatildi', 'Barcha tanlovlar olib tashlandi');
+}
+
+// === COMPLAINT ===
+let complaintCount = 318;
+function submitComplaint() {
+  const viloyat = document.getElementById('shkViloyat').value;
+  const org = document.getElementById('shkOrg').value;
+  const soha = document.getElementById('shkSoha').value;
+  const matn = document.getElementById('shkMatn').value;
+  if (!viloyat || !org || !soha || !matn) {
+    showNotif('❌ Xato', 'Iltimos, majburiy maydonlarni to\'ldiring.');
+    return;
+  }
+  complaintCount++;
+  document.getElementById('totalCases').textContent = complaintCount;
+  document.getElementById('shkViloyat').value = '';
+  document.getElementById('shkOrg').value = '';
+  document.getElementById('shkSoha').value = '';
+  document.getElementById('shkMatn').value = '';
+  showNotif('✅ Shikoyat qabul qilindi!', `#SHK-2024-${String(complaintCount).padStart(4,'0')} — Prokuratura tizimiga yo'naltirildi`);
+}
+
+// === STAFF ===
+function selectStaff(name, role) {
+  document.getElementById('shkPerson').value = name + ' — ' + role;
+  showTab('right','shikoyat');
+  showNotif('Xodim tanlandi', name + ' bo\'yicha shikoyat formasi ochildi');
+}
+
+// === MODAL ===
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); });
+});
+
+// === NOTIFICATION ===
+let notifTimer;
+function showNotif(title, body) {
+  const n = document.getElementById('notification');
+  document.getElementById('notifTitle').textContent = title;
+  document.getElementById('notifBody').textContent = body;
+  n.classList.add('show');
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => n.classList.remove('show'), 4000);
+}
+
+// Animate counter on load
+function animateCounter(el, target) {
+  let cur = 0;
+  const step = Math.ceil(target / 40);
+  const interval = setInterval(() => {
+    cur = Math.min(cur + step, target);
+    el.textContent = cur.toLocaleString();
+    if (cur >= target) clearInterval(interval);
+  }, 30);
+}
+setTimeout(() => {
+  animateCounter(document.getElementById('totalCases'), 318);
+  animateCounter(document.getElementById('totalOrgs'), 1924);
+  animateCounter(document.getElementById('solvedCases'), 187);
+}, 300);
+</script>
+</body>
+</html>
